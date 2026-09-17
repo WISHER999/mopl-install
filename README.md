@@ -1,78 +1,131 @@
-# MOPL# Interpreter
+# MOPL#
 
-A tag-based scripting language with an interpreter written entirely in
-ARM64 Assembly (Apple Silicon / macOS).
+**MOPL#** is a lightweight, custom programming language and interpreter designed around a simple, readable syntax.
 
-- **Language spec / tutorial:** see [`TUTORIAL.md`](./TUTORIAL.md)
-- **Implementation notes & limitations:** see [`NOTES.md`](./NOTES.md)
-- **Interpreter source:** [`mopl_backend.s`](./mopl_backend.s)
+The repository contains the MOPL# interpreter, graphics backend, examples, documentation, and VS Code language support.
 
-## Requirements
+## Quick Start
 
-- macOS on Apple Silicon
-- Xcode Command Line Tools (`xcode-select --install`)
-
-## Build & Run (command line)
+### Clone
 
 ```bash
-cd /Users/[name]/mopl-interpreter 
-chmod +x build.sh
+git clone https://github.com/WISHER999/mopl-install.git
+cd mopl-install
+```
+
+### Build
+
+```bash
 ./build.sh
-./mopl run examples/hello.mopl
 ```
 
-## Running natively in VS Code
+### Run
 
-This repo ships a `.vscode/tasks.json` so you can run any `.mopl` file
-without touching the terminal:
-
-1. Open this folder in VS Code (`code .`).
-2. Open any `.mopl` file, e.g. `examples/hello.mopl`.
-3. Press **Cmd+Shift+B** to build the interpreter, or just press
-   **Cmd+Shift+P → "Run Task" → "MOPL#: Run Current File"** — it builds
-   automatically if `./mopl` doesn't exist yet.
-4. Output appears in the integrated terminal.
-
-### Optional: syntax highlighting extension
-
-The `vscode-extension/` folder is a minimal VS Code extension that adds:
-- `.mopl` syntax highlighting (tags, types, operators, strings)
-- A "Run" button in the editor title bar for `.mopl` files
-- `Cmd+R` to run the current file
-
-To install it locally:
+Run a MOPL# program with:
 
 ```bash
-cd vscode-extension
-npm install -g @vscode/vsce   # one-time
-vsce package
-code --install-extension mopl-language-0.1.0.vsix
+./mopl your_program.mopl
 ```
 
-Reload VS Code afterward. Any `.mopl` file will now be highlighted and
-runnable via the Run button, `Cmd+R`, or the Command Palette.
+For example:
 
-## Repo layout
-
-```
-mopl_backend.s        interpreter source (ARM64 ASM)
-build.sh               assembles + links ./mopl
-examples/               sample .mopl scripts
-.vscode/                tasks/keybindings for running .mopl files in VS Code
-vscode-extension/       syntax highlighting + Run command extension
-TUTORIAL.md             language tutorial
-NOTES.md                implementation scope, caveats, and next steps
+```bash
+./mopl examples/hello_app.mopl
 ```
 
-## Status
+## Example
 
-Implemented: `Tag.` declarations/reassignment, `Terminal`, `Op of`
-(numeric add/subtract/times/divide), `Dif in`.
+A simple MOPL# program:
 
-Not yet implemented: `logic`/`EndLogic`, `Check`/`EndCheck`,
-`Cycle`/`EndCycle`, the `Window`/GUI system. See `NOTES.md` for what's
-needed to add each.
+```text
+Terminal "Hello, world!"
+```
 
-## License
+MOPL# is designed to keep programs readable without requiring lots of punctuation or boilerplate.
 
-MIT — see [`LICENSE`](./LICENSE).
+## Language Features
+
+MOPL# currently includes features such as:
+
+* Terminal output
+* User input
+* Variables and typed values
+* Arithmetic operations
+* Boolean values
+* Comparisons
+* Conditional execution
+* Cycles
+* Function/logic definitions
+* Function calls and returns
+* Tags
+* Built-in functions
+* Graphics
+* Native macOS GUI support
+
+## Graphics
+
+MOPL# includes a native graphics backend on macOS.
+
+Graphics windows can be created through `Gfx.init`, which provides an explicit window title and size.
+
+The graphics system supports the native window/event infrastructure used by the interpreter.
+
+Example:
+
+```text
+Gfx.init "MOPL Window" 800 600
+```
+
+Graphics functionality is being expanded as the language develops.
+
+## VS Code Support
+
+The repository includes a local VS Code extension under:
+
+```text
+vscode-extension/
+```
+
+It provides:
+
+* `.mopl` file detection
+* MOPL# syntax highlighting
+* MOPL# run support
+* Editor integration
+
+### Install the extension locally
+
+Open the `vscode-extension` directory in VS Code and install it as a local extension.
+
+After installing, files with the `.mopl` extension will use the MOPL# language support.
+
+## Examples
+
+Example programs are located in:
+
+```text
+examples/
+```
+
+These are useful for learning the language and testing the interpreter.
+
+## Documentation
+
+Additional language documentation and tutorials are included in the repository.
+
+See:
+
+```text
+TUTORIAL.md
+```
+
+and:
+
+```text
+documentation.html
+```
+
+## Project Structure
+
+```tex
+```
