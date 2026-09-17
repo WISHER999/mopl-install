@@ -127,5 +127,33 @@ documentation.html
 
 ## Project Structure
 
-```tex
+```text
+mopl-install/
+├── examples/
+├── vscode-extension/
+│   └── syntaxes/
+│       └── mopl.tmLanguage.json
+├── mopl_backend.c
+├── graphics_backend.m
+├── mopl_graphics.h
+├── build.sh
+├── TUTORIAL.md
+├── documentation.html
+└── README.md
 ```
+
+## Development
+
+MOPL# is actively developed. The language, interpreter, graphics system, and editor support may continue to evolve.
+
+Build the interpreter after making changes:
+
+```bash
+./build.sh
+```
+
+Then test it using one of the example programs.
+
+## License
+
+See the repository for licensing information.
