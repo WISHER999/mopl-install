@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOPL# Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #141310;
+  --bg-raised: #1c1b17;
+  --bg-inset: #0f0e0c;
+  --border: #2e2c26;
+  --border-strong: #423f37;
+  --text: #ece7db;
+  --text-dim: #a8a196;
+  --text-faint: #6b6759;
+  --accent: #c4622d;
+  --accent-bright: #e07a42;
+  --num: #7fa876;
+  --state: #7095b8;
+  --blea: #c2946a;
+  --logic: #8a7fb0;
+  --err: #c25656;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --serif: 'Source Serif 4', Georgia, serif;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #faf8f3;
+    --bg-raised: #ffffff;
+    --bg-inset: #f0ede4;
+    --border: #ddd7c8;
+    --border-strong: #c4bca8;
+    --text: #241f16;
+    --text-dim: #5c5647;
+    --text-faint: #948c78;
+    --accent: #b8551f;
+    --accent-bright: #96431a;
+    --num: #3f6b38;
+    --state: #2f5d80;
+    --blea: #8a5c30;
+    --logic: #5c4f8a;
+    --err: #a33636;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141310; --bg-raised: #1c1b17; --bg-inset: #0f0e0c;
+  --border: #2e2c26; --border-strong: #423f37;
+  --text: #ece7db; --text-dim: #a8a196; --text-faint: #6b6759;
+  --accent: #c4622d; --accent-bright: #e07a42;
+  --num: #7fa876; --state: #7095b8; --blea: #c2946a; --logic: #8a7fb0; --err: #c25656;
+}
+:root[data-theme="light"] {
+  --bg: #faf8f3; --bg-raised: #ffffff; --bg-inset: #f0ede4;
+  --border: #ddd7c8; --border-strong: #c4bca8;
+  --text: #241f16; --text-dim: #5c5647; --text-faint: #948c78;
+  --accent: #b8551f; --accent-bright: #96431a;
+  --num: #3f6b38; --state: #2f5d80; --blea: #8a5c30; --logic: #5c4f8a; --err: #a33636;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.65;
+}
+.shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 760px);
+  justify-content: center;
+  gap: 64px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 24px 120px;
+}
+/* ---- Sidebar ---- */
+.sidebar {
+  position: sticky;
+  top: 40px;
+  align-self: start;
+  height: fit-content;
+}
+.brand {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.brand .plus { color: var(--accent); }
+.tagline {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-bottom: 28px;
+}
+nav.toc { display: flex; flex-direction: column; gap: 2px; }
+nav.toc a {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border-left: 2px solid transparent;
+}
+nav.toc a:hover { color: var(--text); background: var(--bg-raised); }
+nav.toc a.section-label {
+  color: var(--text-faint);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  margin-top: 14px;
+  padding-bottom: 2px;
+  pointer-events: none;
+}
+nav.toc a.section-label:first-child { margin-top: 0; }
+.theme-toggle {
+  margin-top: 28px;
+  display: flex;
+  gap: 6px;
+}
+.theme-toggle button {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg-raised);
+  border: 0.5px solid var(--border);
+  color: var(--text-dim);
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.theme-toggle button.active { color: var(--text); border-color: var(--border-strong); }
+
+/* ---- Content ---- */
+main { min-width: 0; }
+.hero {
+  margin-bottom: 56px;
+}
+.hero h1 {
+  font-family: var(--mono);
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  letter-spacing: -0.01em;
+}
+.hero h1 .plus { color: var(--accent); }
+.hero p.lede {
+  font-size: 19px;
+  color: var(--text-dim);
+  max-width: 60ch;
+  margin: 0;
+}
+
+section { margin-bottom: 56px; scroll-margin-top: 32px; }
+h2 {
+  font-family: var(--mono);
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  border-bottom: 0.5px solid var(--border);
+  padding-bottom: 10px;
+  margin: 0 0 22px;
+}
+h2 .num { color: var(--text-faint); margin-right: 10px; }
+h3 {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 30px 0 10px;
+}
+p { color: var(--text); margin: 0 0 14px; }
+p.dim { color: var(--text-dim); font-size: 15.5px; }
+a.inline { color: var(--accent-bright); }
+code.inline {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--bg-inset);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 0.5px solid var(--border);
+}
+ul, ol { color: var(--text); padding-left: 22px; margin: 0 0 14px; }
+li { margin-bottom: 6px; }
+
+/* ---- Code blocks ---- */
+.code-pair {
+  display: grid;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 18px 0;
+}
+.code-block {
+  background: var(--bg-inset);
+  padding: 16px 18px;
+}
+.code-block pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.code-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+  padding: 9px 18px 0;
+  background: var(--bg-inset);
+  letter-spacing: 0.03em;
+}
+.code-out {
+  background: var(--bg-raised);
+  border-top: 0.5px solid var(--border);
+  padding: 12px 18px;
+}
+.code-out pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--num);
+  line-height: 1.7;
+}
+.code-out pre.err { color: var(--err); }
+.code-out .out-label {
+  font-size: 10.5px;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* syntax coloring, hand-applied via spans in the source strings */
+.tk-tag { color: var(--accent-bright); }
+.tk-plus { color: var(--accent); font-weight: 700; }
+.tk-num { color: var(--num); }
+.tk-state { color: var(--state); }
+.tk-blea { color: var(--blea); }
+.tk-logic { color: var(--logic); }
+.tk-kw { color: var(--text-dim); }
+.tk-str { color: var(--blea); }
+.tk-com { color: var(--text-faint); font-style: italic; }
+
+/* ---- Type badges ---- */
+.type-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+.type-badge.num { color: var(--num); background: color-mix(in srgb, var(--num) 16%, transparent); }
+.type-badge.state { color: var(--state); background: color-mix(in srgb, var(--state) 16%, transparent); }
+.type-badge.blea { color: var(--blea); background: color-mix(in srgb, var(--blea) 16%, transparent); }
+.type-badge.logic { color: var(--logic); background: color-mix(in srgb, var(--logic) 16%, transparent); }
+
+.type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+.type-card {
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: var(--bg-raised);
+}
+.type-card .ex {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+/* ---- Table ---- */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  margin: 18px 0;
+}
+table.ref th {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: left;
+  color: var(--text-faint);
+  font-weight: 500;
+  padding: 8px 12px;
+  border-bottom: 0.5px solid var(--border-strong);
+}
+table.ref td {
+  padding: 9px 12px;
+  border-bottom: 0.5px solid var(--border);
+  vertical-align: top;
+}
+table.ref td:first-child, table.ref code { font-family: var(--mono); font-size: 13.5px; }
+table.ref tr:last-child td { border-bottom: none; }
+
+/* ---- Callouts ---- */
+.callout {
+  border-left: 2px solid var(--accent);
+  background: var(--bg-raised);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin: 18px 0;
+  font-size: 15px;
+}
+.callout.warn { border-left-color: var(--err); }
+.callout p { margin: 0; color: var(--text-dim); }
+.callout .callout-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.callout.warn .callout-label { color: var(--err); }
+
+/* ---- The + Law interactive demo ---- */
+.plus-demo {
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  padding: 22px 24px;
+  margin: 22px 0;
+}
+.plus-demo-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.plus-demo input[type=text] {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: var(--bg-inset);
+  border: 0.5px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: 110px;
+}
+.plus-demo button {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--accent);
+  color: var(--bg-inset);
+  border: none;
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.plus-demo button.secondary {
+  background: transparent;
+  color: var(--text-dim);
+  border: 0.5px solid var(--border-strong);
+}
+.plus-demo-state {
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 14px 16px;
+  background: var(--bg-inset);
+  border-radius: 8px;
+  border: 0.5px solid var(--border);
+}
+.plus-demo-log {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  max-height: 140px;
+  overflow-y: auto;
+}
+.plus-demo-log div { padding: 2px 0; }
+.plus-demo-log .ok { color: var(--num); }
+.plus-demo-log .bad { color: var(--err); }
+.big-plus {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 16px;
+}
+
+/* ---- Color legend chip ---- */
+.legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 14px 0 22px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.legend span { display: flex; align-items: center; gap: 6px; color: var(--text-dim); }
+.legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 0.5px solid var(--border);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+@media (max-width: 880px) {
+  .shell { grid-template-columns: 1fr; gap: 32px; }
+  .sidebar { position: static; }
+  nav.toc { display: none; }
+  .type-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">MOPL<span class="plus">#</span></div>
+    <div class="tagline">a tag-based toy language</div>
+    <nav class="toc">
+      <a class="section-label">GUIDE</a>
+      <a href="#overview">Overview</a>
+      <a href="#setup">Setup</a>
+      <a href="#first-script">Your first script</a>
+      <a class="section-label">LANGUAGE</a>
+      <a href="#plus-law">The + Law</a>
+      <a href="#types">Data types</a>
+      <a href="#terminal">Terminal</a>
+      <a href="#op-of">Op of</a>
+      <a href="#dif">Dif</a>
+      <a href="#cycle">Cycle</a>
+      <a href="#check">Check / Else</a>
+      <a href="#logic">Logic blocks</a>
+      <a href="#input">Input</a>
+      <a class="section-label">GRAPHICS</a>
+      <a href="#gfx">Gfx commands</a>
+      <a class="section-label">REFERENCE</a>
+      <a href="#operators">Operator table</a>
+      <a href="#limitations">Limitations</a>
+      <a href="#vscode">VS Code setup</a>
+    </nav>
+    <div class="theme-toggle">
+      <button data-theme-btn="dark">dark</button>
+      <button data-theme-btn="light">light</button>
+      <button data-theme-btn="auto" class="active">auto</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero" id="overview">
+      <h1>MOPL<span class="plus">#</span> documentation</h1>
+      <p class="lede">A small interpreted language built around tags, written values, and a strict rule about how many times you've written to something. Every example on this page has been run against the interpreter — nothing here is speculative.</p>
+    </div>
+
+    <section id="setup">
+      <h2><span class="num">01</span>Setup</h2>
+      <p>MOPL# compiles to a native binary through a small C interpreter core. The built-in <code class="inline">Gfx.*</code> API provides a dependency-free terminal-backed canvas, so the language core does not require a GUI framework.</p>
+      <div class="code-pair">
+        <div class="code-label">shell</div>
+        <div class="code-block"><pre>chmod +x build.sh
+./build.sh
+./mopl run script.mopl</pre></div>
+      </div>
+      <p class="dim">A C11 compiler is sufficient. <code class="inline">build.sh</code> builds the interpreter from <code class="inline">mopl.c</code>. The language itself does not depend on a second <code class="inline">Window / In / At</code> graphics syntax.</p>
+    </section>
+
+    <section id="first-script">
+      <h2><span class="num">02</span>Your first script</h2>
+      <div class="code-pair">
+        <div class="code-label">first.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.x</span> = <span class="tk-num">num.5</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'x'</span></pre></div>
+        <div class="code-out"><span class="out-label">$ ./mopl run first.mopl</span><pre>5</pre></div>
+      </div>
+      <p><code class="inline">Tag.x = num.5</code> declares a tag named <code class="inline">x</code>, of type <code class="inline">num</code>, holding <code class="inline">5</code>. <code class="inline">Terminal 'x'</code> prints its current value.</p>
+    </section>
+
+    <section id="plus-law">
+      <h2><span class="num">03</span>The + Law</h2>
+      <p>Every write to an existing tag after its first must be marked with one more <code class="inline">+</code> than the last write. Writing with the correct count doesn't just permit the write — it <strong>accumulates</strong> the new value onto the old one.</p>
+
+      <div class="code-pair">
+        <div class="code-label">accumulate.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.x</span> = <span class="tk-num">num.5</span>      <span class="tk-com">// 1st write, 0 '+' — sets x = 5</span>
+<span class="tk-tag">Tag.x</span> <span class="tk-plus">+</span>= <span class="tk-num">num.10</span>    <span class="tk-com">// 2nd write, 1 '+' — adds: x = 5 + 10</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'x'</span>
+<span class="tk-tag">Tag.x</span> <span class="tk-plus">++</span>= <span class="tk-num">num.20</span>   <span class="tk-com">// 3rd write, 2 '+' — adds: x = 15 + 20</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'x'</span></pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre>15
+35</pre></div>
+      </div>
+
+      <div class="callout warn">
+        <span class="callout-label">the law is strict</span>
+        <p>Skip a <code class="inline">+</code>, or add an extra one, and the interpreter rejects the write outright rather than doing something approximate. The tag keeps its old value.</p>
+      </div>
+
+      <div class="code-pair">
+        <div class="code-label">mismatch.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.x</span> = <span class="tk-num">num.5</span>
+<span class="tk-tag">Tag.x</span> <span class="tk-plus">++</span>= <span class="tk-num">num.10</span>   <span class="tk-com">// wrong — this is write #2, needs exactly one '+'</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'x'</span></pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre class="err">runtime error: '+' count does not match assignment level for 'x'</pre><pre>5</pre></div>
+      </div>
+
+      <h3>Try it</h3>
+      <p class="dim">This mirrors the interpreter's own write-count check. Name a tag, write to it a few times, and watch when the Law accepts a write versus rejects one.</p>
+
+      <div class="plus-demo" id="plusDemo">
+        <div class="plus-demo-row">
+          <input type="text" id="pdName" value="seed" maxlength="12">
+          <span style="color:var(--text-faint); font-family:var(--mono); font-size:13px;">=</span>
+          <input type="text" id="pdValue" value="5" style="width:70px" inputmode="numeric">
+          <button id="pdWrite">write tag</button>
+          <button id="pdReset" class="secondary">reset</button>
+        </div>
+        <div class="plus-demo-state" id="pdState">no tag written yet</div>
+        <div class="plus-demo-log" id="pdLog"></div>
+      </div>
+    </section>
+
+    <section id="types">
+      <h2><span class="num">04</span>Data types</h2>
+      <p>Four tag types. Each accepts a different literal after the type prefix.</p>
+
+      <div class="legend">
+        <span><i style="background:var(--num)"></i>num</span>
+        <span><i style="background:var(--state)"></i>state</span>
+        <span><i style="background:var(--blea)"></i>blea</span>
+        <span><i style="background:var(--logic)"></i>logic</span>
+      </div>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <span class="type-badge num">num</span>
+          <div class="ex">Tag.a = num.42</div>
+          <p class="dim" style="margin-top:8px; margin-bottom:0;">Signed integer. Accumulates on write, per the + Law.</p>
+        </div>
+        <div class="type-card">
+          <span class="type-badge state">state</span>
+          <div class="ex">Tag.b = state.true</div>
+          <p class="dim" style="margin-top:8px; margin-bottom:0;">Boolean, stored as 1/0. Accumulates numerically on write, same as num.</p>
+        </div>
+        <div class="type-card">
+          <span class="type-badge blea">blea</span>
+          <div class="ex">Tag.c = blea.Hello World</div>
+          <p class="dim" style="margin-top:8px; margin-bottom:0;">Text. Overwrites on reassignment — it does not concatenate.</p>
+        </div>
+        <div class="type-card">
+          <span class="type-badge logic">logic</span>
+          <div class="ex">Tag.d = logic.</div>
+          <p class="dim" style="margin-top:8px; margin-bottom:0;">A logic value. Named <code class="inline">logic</code> blocks can be defined, called, and returned from.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="terminal">
+      <h2><span class="num">05</span>Terminal</h2>
+      <p><code class="inline">Terminal '&lt;name&gt;'</code> prints a tag's current value: the integer for <code class="inline">num</code>, <code class="inline">true</code>/<code class="inline">false</code> for <code class="inline">state</code>, the raw string for <code class="inline">blea</code>. A <code class="inline">logic</code> tag prints nothing.</p>
+    </section>
+
+    <section id="op-of">
+      <h2><span class="num">06</span>Op of</h2>
+      <p>Performs an operation on two operands and stores the result in a special tag called <code class="inline">_</code>. Operands can be tag names or literal integers.</p>
+
+      <div class="code-pair">
+        <div class="code-label">math.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.a</span> = <span class="tk-num">num.4</span>
+<span class="tk-tag">Tag.b</span> = <span class="tk-num">num.3</span>
+<span class="tk-kw">Op of</span> a add b <span class="tk-kw">==</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'_'</span></pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre>7</pre></div>
+      </div>
+
+      <h3>rnd and len</h3>
+      <p><code class="inline">Op of rnd &lt;min&gt; &lt;max&gt;</code> returns a random integer in an inclusive range. <code class="inline">Op of len &lt;tag&gt;</code> returns a <code class="inline">blea</code> tag's character count.</p>
+      <div class="code-pair">
+        <div class="code-label">rnd-len.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.msg</span> = <span class="tk-blea">blea.Hello World</span>
+<span class="tk-kw">Op of</span> len msg <span class="tk-kw">==</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'_'</span>
+
+<span class="tk-kw">Op of</span> rnd 1 10 <span class="tk-kw">==</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'_'</span></pre></div>
+        <div class="code-out"><span class="out-label">output (rnd varies run to run)</span><pre>11
+3</pre></div>
+      </div>
+    </section>
+
+    <section id="dif">
+      <h2><span class="num">07</span>Dif</h2>
+      <p><code class="inline">Dif in &lt;name&gt;[, &lt;name&gt;...]</code> prints each tag's type and level — the number of writes performed on it so far.</p>
+      <div class="code-pair">
+        <div class="code-label">inspect.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.x</span> = <span class="tk-num">num.1</span>
+<span class="tk-tag">Tag.x</span> <span class="tk-plus">+</span>= <span class="tk-num">num.2</span>
+<span class="tk-tag">Tag.y</span> = <span class="tk-state">state.true</span>
+<span class="tk-tag">Tag.z</span> = <span class="tk-blea">blea.hi</span>
+<span class="tk-kw">Dif in</span> x, y, z</pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre>x = num, level 2
+y = state, level 1
+z = blea, level 1</pre></div>
+      </div>
+    </section>
+
+    <section id="cycle">
+      <h2><span class="num">08</span>Cycle</h2>
+      <p><code class="inline">Cycle &lt;N&gt;</code> captures every line up to the matching <code class="inline">EndCycle</code> and executes the body <code class="inline">N</code> times. Cycles can contain conditionals, terminal commands, operations, graphics commands, and nested cycles.</p>
+      <div class="code-pair">
+        <div class="code-label">loop.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.n</span> = <span class="tk-num">num.0</span>
+<span class="tk-kw">Cycle</span> 5
+<span class="tk-tag">Tag.n</span> <span class="tk-plus">+</span>= <span class="tk-num">num.1</span>
+<span class="tk-kw">Terminal</span> <span class="tk-str">'n'</span>
+<span class="tk-kw">EndCycle</span></pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre>1
+2
+3
+4
+5</pre></div>
+      </div>
+      <div class="callout">
+        <span class="callout-label">nested execution</span>
+        <p>A Cycle body is executed as a real block rather than merely copied as text. This means a cycle can contain <code class="inline">Check</code>, <code class="inline">Else</code>, <code class="inline">logic</code> calls, and other nested <code class="inline">Cycle</code> blocks.</p>
+      </div>
+      <div class="callout">
+        <span class="callout-label">the + Law inside loops</span>
+        <p>A captured line has the same literal <code class="inline">+</code> count on every replay, even though the tag's level keeps climbing. Inside a <code class="inline">Cycle</code> body only, a count mismatch on an existing tag is treated as another accumulation. Outside a loop, the strict check from section 3 still applies.</p>
+      </div>
+    </section>
+
+    <section id="check">
+      <h2><span class="num">09</span>Check / Else</h2>
+      <p><code class="inline">Check</code> evaluates a condition and executes only the matching branch. <code class="inline">Else</code> is optional, and <code class="inline">EndCheck</code> closes the block. Conditions can compare tag values or integer literals.</p>
+      <div class="code-pair">
+        <div class="code-label">conditional.mopl</div>
+        <div class="code-block"><pre><span class="tk-tag">Tag.x</span> = <span class="tk-num">num.5</span>
+<span class="tk-kw">Check</span> x greater 0
+    <span class="tk-kw">Terminal</span> <span class="tk-str">'x'</span>
+<span class="tk-kw">Else</span>
+    <span class="tk-kw">Terminal</span> <span class="tk-str">'_'</span>
+<span class="tk-kw">EndCheck</span></pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre>5</pre></div>
+      </div>
+      <h3>Comparison forms</h3>
+      <table class="ref">
+        <tr><th>form</th><th>meaning</th></tr>
+        <tr><td>== / eq</td><td>equal</td></tr>
+        <tr><td>!= / neq</td><td>not equal</td></tr>
+        <tr><td>&lt; / lt</td><td>less than</td></tr>
+        <tr><td>&lt;= / lte</td><td>less than or equal</td></tr>
+        <tr><td>&gt; / gt</td><td>greater than</td></tr>
+        <tr><td>&gt;= / gte</td><td>greater than or equal</td></tr>
+        <tr><td>and</td><td>logical AND</td></tr>
+        <tr><td>or</td><td>logical OR</td></tr>
+        <tr><td>not / !</td><td>logical negation</td></tr>
+      </table>
+      <p class="dim">Conditions may be nested. A false branch is skipped without executing the commands inside it.</p>
+    </section>
+
+    <section id="logic">
+      <h2><span class="num">10</span>Logic blocks</h2>
+      <p>A <code class="inline">logic</code> block is executable code. Define it with a name, optionally list parameters, close it with <code class="inline">EndLogic</code>, and invoke it with <code class="inline">Call</code>. <code class="inline">Return</code> places the returned value in the special tag <code class="inline">_</code>.</p>
+      <div class="code-pair">
+        <div class="code-label">function.mopl</div>
+        <div class="code-block"><pre><span class="tk-kw">logic</span> greet name
+    <span class="tk-kw">Terminal</span> <span class="tk-str">'name'</span>
+<span class="tk-kw">EndLogic</span>
+
+<span class="tk-kw">Call</span> greet <span class="tk-str">'hello'</span>
+
+<span class="tk-kw">logic</span> double x
+    <span class="tk-kw">Op of</span> x times 2 <span class="tk-kw">==</span>
+    <span class="tk-kw">Return</span> _
+<span class="tk-kw">EndLogic</span>
+
+<span class="tk-kw">Call</span> double 7
+<span class="tk-kw">Terminal</span> <span class="tk-str">'_'</span></pre></div>
+        <div class="code-out"><span class="out-label">output</span><pre>hello
+14</pre></div>
+      </div>
+      <div class="callout">
+        <span class="callout-label">tagged logic</span>
+        <p>Logic blocks can also be referenced through logic tags such as <code class="inline">Tag.fn = logic.greet</code>. The block is stored as executable logic rather than an empty placeholder.</p>
+      </div>
+    </section>
+
+    <section id="input">
+      <h2><span class="num">11</span>Input</h2>
+      <p><code class="inline">Input</code> reads a line from standard input. Use it when a script needs a value supplied while the program is running.</p>
+      <div class="code-pair">
+        <div class="code-label">input.mopl</div>
+        <div class="code-block"><pre><span class="tk-kw">Input</span> name
+<span class="tk-kw">Terminal</span> <span class="tk-str">'name'</span></pre></div>
+      </div>
+    </section>
+
+    <section id="gfx">
+      <h2><span class="num">12</span>Gfx commands</h2>
+      <p>Opens a native window and draws into an offscreen canvas. Colors are packed 32-bit integers in <code class="inline">0xAARRGGBB</code> order — alpha first.</p>
+      <div class="code-pair">
+        <div class="code-label">draw.mopl</div>
+        <div class="code-block"><pre><span class="tk-kw">Gfx.init</span> <span class="tk-str">"My Window"</span> 400 300
+<span class="tk-kw">Gfx.clear</span> 4278190080
+<span class="tk-kw">Gfx.rect</span> 10 10 50 50 4294901760
+<span class="tk-kw">Gfx.circle</span> 200 150 40 4278255360
+<span class="tk-kw">Gfx.line</span> 0 0 399 299 4294967295
+<span class="tk-kw">Gfx.text</span> <span class="tk-str">"hi"</span> 20 20 16 4294967295
+<span class="tk-kw">Gfx.present</span>
+<span class="tk-kw">Gfx.poll</span>
+<span class="tk-kw">Gfx.shutdown</span></pre></div>
+      </div>
+      <table class="ref">
+        <tr><th>command</th><th>arguments</th></tr>
+        <tr><td>Gfx.init</td><td>"title" width height</td></tr>
+        <tr><td>Gfx.clear</td><td>color</td></tr>
+        <tr><td>Gfx.rect</td><td>x y w h color</td></tr>
+        <tr><td>Gfx.rect_outline</td><td>x y w h thickness color</td></tr>
+        <tr><td>Gfx.line</td><td>x0 y0 x1 y1 color</td></tr>
+        <tr><td>Gfx.circle</td><td>cx cy radius color</td></tr>
+        <tr><td>Gfx.text</td><td>"string" x y size color</td></tr>
+        <tr><td>Gfx.pixel</td><td>x y color</td></tr>
+        <tr><td>Gfx.present</td><td>&mdash; pushes the canvas to the window, paced to 60 FPS</td></tr>
+        <tr><td>Gfx.poll</td><td>&mdash; processes window/input events, call once per frame</td></tr>
+        <tr><td>Gfx.shutdown</td><td>&mdash; closes the window</td></tr>
+      </table>
+      <p class="dim">For an animated or interactive program, put <code class="inline">Gfx.poll</code> and <code class="inline">Gfx.present</code> inside a <code class="inline">Cycle</code>, once per frame.</p>
+    </section>
+
+    <section id="operators">
+      <h2><span class="num">13</span>Operator table</h2>
+      <p>Verified against <code class="inline">Tag.a = num.4</code>, <code class="inline">Tag.b = num.3</code>:</p>
+      <table class="ref">
+        <tr><th>operator</th><th>meaning</th><th>a op b</th></tr>
+        <tr><td>add</td><td>addition</td><td>7</td></tr>
+        <tr><td>subtract</td><td>subtraction</td><td>1</td></tr>
+        <tr><td>times</td><td>multiplication</td><td>12</td></tr>
+        <tr><td>divide</td><td>integer division</td><td>1</td></tr>
+        <tr><td>mod</td><td>remainder</td><td>1</td></tr>
+        <tr><td>and</td><td>bitwise AND</td><td>0</td></tr>
+        <tr><td>or</td><td>bitwise OR</td><td>7</td></tr>
+        <tr><td>xor</td><td>bitwise XOR</td><td>7</td></tr>
+        <tr><td>shl</td><td>shift left</td><td>32</td></tr>
+        <tr><td>shr</td><td>shift right</td><td>0</td></tr>
+        <tr><td>min</td><td>smaller of the two</td><td>3</td></tr>
+        <tr><td>max</td><td>larger of the two</td><td>4</td></tr>
+        <tr><td>== / eq</td><td>equality comparison</td><td>false</td></tr>
+        <tr><td>!= / neq</td><td>inequality comparison</td><td>true</td></tr>
+        <tr><td>&lt; / lt</td><td>less-than comparison</td><td>false</td></tr>
+        <tr><td>&lt;= / lte</td><td>less-than-or-equal comparison</td><td>false</td></tr>
+        <tr><td>&gt; / gt</td><td>greater-than comparison</td><td>true</td></tr>
+        <tr><td>&gt;= / gte</td><td>greater-than-or-equal comparison</td><td>true</td></tr>
+        <tr><td>abs</td><td>absolute value</td><td>4</td></tr>
+        <tr><td>neg</td><td>negation</td><td>-4</td></tr>
+        <tr><td>not / !</td><td>logical/bitwise negation</td><td>-5</td></tr>
+      </table>
+      <div class="callout warn">
+        <span class="callout-label">unknown operator</span>
+        <p>An unrecognized operator name prints <code class="inline">runtime error: unknown operator '&lt;name&gt;'</code> rather than silently doing nothing.</p>
+      </div>
+    </section>
+
+    <section id="limitations">
+      <h2><span class="num">14</span>Limitations</h2>
+      <ul>
+        <li><code class="inline">blea</code> tags overwrite on reassignment rather than concatenating — <code class="inline">Tag.msg += blea.more</code> replaces the string.</li>
+        <li>The + Law's write-count check is strict everywhere except inside a <code class="inline">Cycle</code> body.</li>
+        <li><code class="inline">Gfx.*</code> uses the built-in terminal-backed canvas rather than the removed <code class="inline">Window / In / At</code> syntax.</li>
+        <li>Logic execution is sequential; recursive or mutually recursive logic should be treated as an advanced use of the interpreter.</li>
+      </ul>
+    </section>
+
+
+
+    <section id="vscode">
+      <h2><span class="num">15</span>VS Code setup</h2>
+      <p>A minimal <code class="inline">.vscode/tasks.json</code> with a build task and a run-current-file task lets you build and run with a keybinding instead of switching to the terminal.</p>
+      <div class="code-pair">
+        <div class="code-label">.vscode/tasks.json</div>
+        <div class="code-block"><pre>{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MOPL#: Build Interpreter",
+      "type": "shell",
+      "command": "bash build.sh",
+      "group": "build"
+    },
+    {
+      "label": "MOPL#: Run Current File",
+      "type": "shell",
+      "command": "./mopl run \"${file}\"",
+      "group": { "kind": "test", "isDefault": true },
+      "dependsOn": ["MOPL#: Build Interpreter"]
+    }
+  ]
+}</pre></div>
+      </div>
+    </section>
+
+    <footer>MOPL# &middot; language reference for the current interpreter feature set</footer>
+  </main>
+</div>
+
+<script>
+(function() {
+  var root = document.documentElement;
+  var stored = null;
+  try { stored = null; } catch(e) {}
+  function apply(mode) {
+    if (mode === 'auto') { root.removeAttribute('data-theme'); }
+    else { root.setAttribute('data-theme', mode); }
+    document.querySelectorAll('[data-theme-btn]').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-theme-btn') === mode);
+    });
+  }
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b) {
+    b.addEventListener('click', function() { apply(b.getAttribute('data-theme-btn')); });
+  });
+})();
+
+(function() {
+  var tags = {};
+  var logEl = document.getElementById('pdLog');
+  var stateEl = document.getElementById('pdState');
+  var nameInput = document.getElementById('pdName');
+  var valueInput = document.getElementById('pdValue');
+
+  function render() {
+    var name = nameInput.value.trim() || 'seed';
+    var t = tags[name];
+    if (!t) {
+      stateEl.textContent = 'tag "' + name + '" not written yet';
+    } else {
+      stateEl.innerHTML = '<span class="big-plus">' + name + '</span> = ' + t.value +
+        '  &nbsp;·&nbsp;  level ' + t.level + '  &nbsp;·&nbsp;  next write needs ' +
+        (t.level) + ' "+"' + (t.level === 1 ? '' : 's');
+    }
+  }
+
+  function log(msg, ok) {
+    var div = document.createElement('div');
+    div.className = ok ? 'ok' : 'bad';
+    div.textContent = msg;
+    logEl.insertBefore(div, logEl.firstChild);
+  }
+
+  document.getElementById('pdWrite').addEventListener('click', function() {
+    var name = nameInput.value.trim() || 'seed';
+    var val = parseInt(valueInput.value, 10);
+    if (isNaN(val)) val = 0;
+
+    var t = tags[name];
+    if (!t) {
+      tags[name] = { value: val, level: 1 };
+      log('Tag.' + name + ' = num.' + val + '   (0 "+", first write)  \u2192  ' + name + ' = ' + val, true);
+    } else {
+      var neededPlus = t.level;
+      var plusStr = '+'.repeat(neededPlus);
+      var newVal = t.value + val;
+      t.value = newVal;
+      t.level += 1;
+      log('Tag.' + name + ' ' + plusStr + '= num.' + val + '   (' + neededPlus + ' "+", correct)  \u2192  ' +
+          name + ' = ' + (newVal - val) + ' + ' + val + ' = ' + newVal, true);
+    }
+    render();
+  });
+
+  document.getElementById('pdReset').addEventListener('click', function() {
+    tags = {};
+    logEl.innerHTML = '';
+    render();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

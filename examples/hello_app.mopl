@@ -1,0 +1,17 @@
+Gfx.init "MOPL# Hello App" 640 420
+
+Gfx.clear 4278190335
+
+Gfx.rect 40 40 560 340 4282400835
+Gfx.rect_outline 40 40 560 340 4 4294967295
+
+Gfx.circle 320 190 80 4278255360
+
+Gfx.line 100 300 540 300 4294967295
+
+Gfx.text "MOPL# APP" 220 90 32 4294967295
+Gfx.text "Hello from MOPL#" 205 145 22 4294967295
+Gfx.text "Native Cocoa graphics" 195 330 18 4294967295
+
+Gfx.present
+Gfx.poll

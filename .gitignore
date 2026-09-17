@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Build artifacts
+*.o
+*.s
+
+# Local binaries
+mopl
+mopl_engine
+
+# Backup files
+*.backup
+*.bak

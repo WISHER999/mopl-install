@@ -1,0 +1,9 @@
+Window "APP" 400 250
+
+Button hello "Click This Big boy." 100 90 200 50ـ
+
+OnClick hello
+    Terminal "Hello from the button!"
+EndClick
+
+EndWindow

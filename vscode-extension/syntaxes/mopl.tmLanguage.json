@@ -1,0 +1,160 @@
+{
+"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+"name": "MOPL#",
+"scopeName": "source.mopl",
+"patterns": [
+{ "include": "#comments" },
+{ "include": "#strings" },
+{ "include": "#prompts" },
+{ "include": "#tag-decl" },
+{ "include": "#gfx" },
+{ "include": "#gui" },
+{ "include": "#keywords" },
+{ "include": "#types" },
+{ "include": "#booleans" },
+{ "include": "#numbers" },
+{ "include": "#operators" },
+{ "include": "#builtins" }
+],
+"repository": {
+"comments": {
+  "patterns": [
+    {
+      "name": "comment.line.double-slash.mopl",
+      "match": "//.*$"
+    }
+  ]
+},
+
+"strings": {
+  "patterns": [
+    {
+      "name": "string.quoted.single.mopl",
+      "match": "'(?:[^'\\\\]|\\\\.)*'"
+    }
+  ]
+},
+
+"prompts": {
+  "patterns": [
+    {
+      "name": "string.interpolated.mopl",
+      "match": "\\{[^}]+\\}"
+    }
+  ]
+},
+
+"tag-decl": {
+  "patterns": [
+    {
+      "name": "variable.other.mopl",
+      "match": "\\bTag\\.[A-Za-z_][A-Za-z0-9_]*"
+    },
+    {
+      "name": "keyword.operator.assignment.mopl",
+      "match": "\\+*="
+    }
+  ]
+},
+
+"gfx": {
+  "patterns": [
+    {
+      "name": "support.function.mopl",
+      "match": "\\bGfx\\.[A-Za-z_][A-Za-z0-9_]*\\b"
+    }
+  ]
+},
+
+"gui": {
+  "patterns": [
+    {
+      "name": "entity.name.type.mopl",
+      "match": "\\b(Window|Text|Button|Input|SetText|GetText|OnClick|EndClick|EndWindow)\\b"
+    }
+  ]
+},
+
+"keywords": {
+  "patterns": [
+    {
+      "name": "keyword.control.mopl",
+      "match": "\\b(Terminal|Check|If|Run|EndCheck|Cycle|Times|EndCycle|Logic|EndLogic|Call|Return|Input)\\b"
+    },
+    {
+      "name": "keyword.control.mopl",
+      "match": "\\bOp\\s+of\\b"
+    },
+    {
+      "name": "keyword.control.mopl",
+      "match": "\\bDif\\s+in\\b"
+    },
+    {
+      "name": "keyword.control.mopl",
+      "match": "\\bIf\\s+ButtonPressed\\b"
+    },
+    {
+      "name": "keyword.control.mopl",
+      "match": "\\b(add\\s+a|with)\\b"
+    },
+    {
+      "name": "keyword.control.mopl",
+      "match": "\\b(In|At)\\b"
+    }
+  ]
+},
+
+"types": {
+  "patterns": [
+    {
+      "name": "storage.type.mopl",
+      "match": "\\b(num|state|blea|logic)\\."
+    }
+  ]
+},
+
+"numbers": {
+  "patterns": [
+    {
+      "name": "constant.numeric.mopl",
+      "match": "(?<![A-Za-z0-9_])-?[0-9]+(?:\\.[0-9]+)?\\b"
+    }
+  ]
+},
+
+"booleans": {
+  "patterns": [
+    {
+      "name": "constant.language.boolean.mopl",
+      "match": "\\b(true|false)\\b"
+    }
+  ]
+},
+
+"operators": {
+  "patterns": [
+    {
+      "name": "keyword.operator.mopl",
+      "match": "\\b(add|subtract|times|divide|mod|pow|and|or|xor|shl|shr|min|max|abs|floor|ceil|not|cos|tan)\\b"
+    },
+    {
+      "name": "keyword.operator.comparison.mopl",
+      "match": "==|!=|<=|>=|<|>"
+    },
+    {
+      "name": "keyword.operator.assignment.mopl",
+      "match": "\\+*="
+    }
+  ]
+},
+
+"builtins": {
+  "patterns": [
+    {
+      "name": "support.function.mopl",
+      "match": "\\b(rnd|len)\\b"
+    }
+  ]
+}
+}
+}

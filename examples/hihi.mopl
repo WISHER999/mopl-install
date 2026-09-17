@@ -1,0 +1,6 @@
+Tag.seed = num.7
+Terminal 'seed'
+Tag.seed += num.13
+Terminal 'seed'
+Tag.seed ++= num.5
+Terminal 'seed'
